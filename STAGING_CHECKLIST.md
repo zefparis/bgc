@@ -79,3 +79,45 @@ Turnstile: create site in Cloudflare dashboard → add staging + prod hostnames 
 - ☐ Production DNS cutover
 - ☐ Lighthouse audit on staging URL
 - ☐ Product Owner approval
+
+## 8. BGC-004 — GitHub & Vercel integration status
+
+### GitHub (done)
+
+- Remote: `git@github.com:zefparis/bgc.git` (public repo, `zefparis/bgc`)
+- Branches pushed: `main` (production), `staging` (preproduction) — both at `5235d86`
+- Commit history preserved: `91eb511` → `a284c36` → `5235d86`
+- No `.env`, secrets, or credentials tracked (`.env*` gitignored; only empty `.env.example` present)
+- CI workflow: `.github/workflows/ci.yml` — npm ci → typecheck → lint → vitest → build, `contents: read`, per-ref concurrency
+
+### ⛔ Blocker — GitHub Actions billing lock
+
+CI workflow pushed and triggered correctly, but **both runs failed before any step executed**:
+
+> "The job was not started because your account is locked due to a billing issue." — GitHub check-run annotation
+
+**Required action (PO):** resolve billing on the `zefparis` GitHub account (Settings → Billing). No workflow change needed — runs will pass once unblocked (all steps verified green locally).
+
+### Branch protection (needs repo admin — `gh` token invalid locally)
+
+Configure in GitHub → Settings → Branches → add rule for `main`:
+- Require a pull request before merging (1 approval)
+- Require status checks → select `typecheck · lint · test · build`
+- Require branches to be up to date
+- Do not allow force pushes / deletions
+- Apply same rule (or a lighter one: PR + CI) to `staging`
+
+### Vercel (blocked — no credentials available locally)
+
+No Vercel CLI installed and no auth token on this machine. **Required action (PO):**
+
+1. vercel.com → Add New → Project → **Import Git Repository** → select `zefparis/bgc`
+2. Framework Preset: **Next.js** (auto-detected) — leave build/output defaults
+3. Root directory: repository root (`.`)
+4. Production branch: `main`; ensure **Preview** deployments enabled for `staging` (default)
+5. Set env vars from §1 under **Preview** scope first
+6. First `staging` push → auto preview URL `https://bgc-<hash>-zefparis.vercel.app` (or project alias)
+
+Do **not** attach `bgcholding.com` domains yet — OVH DNS stays untouched until production cutover approval.
+
+**Alternative:** provide a `VERCEL_TOKEN` + `VERCEL_ORG_ID`/`VERCEL_PROJECT_ID` (as env vars, never committed) and the CLI path can be used instead.
