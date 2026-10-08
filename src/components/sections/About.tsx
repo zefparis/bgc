@@ -1,10 +1,11 @@
 import { SectionHead } from '@/components/shared/SectionHead';
-import { offices, regions } from '@/content/locations';
+import { governance, offices, regions } from '@/content/locations';
 
 export function About() {
   return (
     <section id="about">
-      <div className="wrap about">
+      <div className="wrap">
+        <div className="about">
         <div>
           <SectionHead
             kicker="About"
@@ -40,6 +41,19 @@ export function About() {
           <div>
             <b>Regions</b>
             <span>{regions.join(' · ')}</span>
+          </div>
+        </div>
+        </div>
+
+        <div className="about-gov">
+          <h3>Disciplined ownership. Accountable delivery.</h3>
+          <div className="about-list gov-list">
+            {governance.map((item) => (
+              <div key={item.title}>
+                <b>{item.title}</b>
+                <span>{item.description}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

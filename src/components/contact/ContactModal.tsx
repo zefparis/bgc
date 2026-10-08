@@ -17,16 +17,22 @@ const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
  */
 export function ContactModal() {
   const [open, setOpen] = useState(false);
-  const [sent, setSent] = useState(false);
+  // 'sent' = server confirmed delivery; 'mailto' = email client opened as a
+  // fallback — the message has NOT been delivered server-side and the UI must
+  // not claim otherwise.
+  const [result, setResult] = useState<'idle' | 'sent' | 'mailto'>('idle');
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [token, setToken] = useState<string | null>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
 
   const openModal = useCallback(() => {
-    setSent(false);
+    triggerRef.current = document.activeElement as HTMLElement | null;
+    setResult('idle');
     setError('');
     setToken(null);
     formRef.current?.reset();
@@ -34,7 +40,12 @@ export function ContactModal() {
     setOpen(true);
   }, []);
 
-  const closeModal = useCallback(() => setOpen(false), []);
+  const closeModal = useCallback(() => {
+    setOpen(false);
+    // Restore focus to the element that opened the modal.
+    triggerRef.current?.focus();
+    triggerRef.current = null;
+  }, []);
 
   // Open on any #contact anchor — same delegation as the reference site.
   useEffect(() => {
@@ -65,11 +76,28 @@ export function ContactModal() {
     };
   }, [open]);
 
-  // Escape to close
+  // Escape to close + minimal focus trap (Tab cycles within the card)
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeModal();
+        return;
+      }
+      if (e.key !== 'Tab' || !cardRef.current) return;
+      const focusables = cardRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), textarea:not([disabled])',
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0]!;
+      const last = focusables[focusables.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
@@ -120,11 +148,12 @@ export function ContactModal() {
         body: JSON.stringify(parsed.data),
       });
       if (resp.ok) {
-        setSent(true);
+        setResult('sent');
       } else if (resp.status === 503) {
-        // Backend not configured yet — mailto fallback keeps the enquiry alive.
+        // Backend not configured — hand the message to the user's email
+        // client instead of pretending it was delivered.
         mailtoFallback(parsed.data);
-        setSent(true);
+        setResult('mailto');
       } else {
         const err = (await resp.json().catch(() => ({}))) as {
           error?: string;
@@ -133,7 +162,7 @@ export function ContactModal() {
       }
     } catch {
       mailtoFallback(parsed.data);
-      setSent(true);
+      setResult('mailto');
     } finally {
       setSending(false);
     }
@@ -148,6 +177,7 @@ export function ContactModal() {
       }}
     >
       <div
+        ref={cardRef}
         className="modal-card"
         role="dialog"
         aria-modal="true"
@@ -160,7 +190,7 @@ export function ContactModal() {
         >
           &times;
         </button>
-        <div hidden={sent}>
+        <div hidden={result !== 'idle'}>
           <h3 id="contactModalTitle">Get in touch</h3>
           <p className="modal-sub">
             Tell us a little about your enquiry and we&apos;ll respond shortly.
@@ -210,13 +240,25 @@ export function ContactModal() {
             </button>
           </form>
         </div>
-        <div className="contact-thanks" hidden={!sent}>
-          <h3>Thank you.</h3>
-          <p>
-            Your message has been received. A member of our team will be in
-            touch shortly.
-          </p>
-        </div>
+        {result === 'sent' && (
+          <div className="contact-thanks">
+            <h3>Thank you.</h3>
+            <p>
+              Your message has been received. A member of our team will be in
+              touch shortly.
+            </p>
+          </div>
+        )}
+        {result === 'mailto' && (
+          <div className="contact-thanks">
+            <h3>Almost done.</h3>
+            <p>
+              Our online form isn&apos;t available right now, so we&apos;ve
+              opened your email client with your message pre-filled — please
+              press send there to reach us at {site.contact.email}.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

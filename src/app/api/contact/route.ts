@@ -5,6 +5,33 @@ import { contactSchema, type ContactApiResponse } from '@/lib/validation';
 
 export const runtime = 'nodejs';
 
+/**
+ * Sliding-window per-IP rate limiter.
+ *
+ * Limits: 5 submissions per IP per 10 minutes. Defense-in-depth — Turnstile
+ * remains the primary bot control. Caveat: this map lives in the function
+ * instance's memory, so on serverless platforms (Vercel) it is per-warm-
+ * instance and resets on cold start. That makes it a best-effort throttle,
+ * not a global guarantee. If abuse becomes a real concern, move to
+ * Vercel WAF rate-limit rules or Upstash Ratelimit (no infra added yet —
+ * see SECURITY_REVIEW.md).
+ */
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_PER_WINDOW = 5;
+const hits = new Map<string, number[]>();
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const arr = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  if (arr.length >= MAX_PER_WINDOW) {
+    hits.set(ip, arr);
+    return true;
+  }
+  arr.push(now);
+  hits.set(ip, arr);
+  return false;
+}
+
 function json(body: ContactApiResponse, status: number) {
   return NextResponse.json(body, { status });
 }
@@ -63,6 +90,18 @@ export async function POST(request: NextRequest) {
     return json({ ok: true }, 200);
   }
 
+  // Rate limit — per IP, evaluated before any external calls.
+  const clientIp =
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    request.headers.get('x-real-ip') ??
+    'unknown';
+  if (rateLimited(clientIp)) {
+    return json(
+      { ok: false, error: 'Too many requests — please try again later.' },
+      429,
+    );
+  }
+
   // Turnstile verification — required when configured. When the secret is
   // absent the endpoint reports unconfigured (503) instead of silently
   // skipping bot protection.
@@ -70,8 +109,10 @@ export async function POST(request: NextRequest) {
     if (!data.turnstileToken) {
       return json({ ok: false, error: 'Security check failed — please try again.' }, 400);
     }
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
-    const valid = await verifyTurnstile(data.turnstileToken, ip);
+    const valid = await verifyTurnstile(
+      data.turnstileToken,
+      clientIp === 'unknown' ? null : clientIp,
+    );
     if (!valid) {
       return json({ ok: false, error: 'Security check failed — please try again.' }, 403);
     }

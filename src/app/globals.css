@@ -530,9 +530,39 @@ section {
   max-width: 20ch;
 }
 
+.about-gov {
+  margin-top: 72px;
+}
+
+.about-gov h3 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  margin-bottom: 22px;
+}
+
+.gov-list span {
+  max-width: 56ch;
+}
+
 @media (max-width: 820px) {
   .about {
     grid-template-columns: 1fr;
+  }
+
+  .about-gov {
+    margin-top: 48px;
+  }
+
+  .gov-list div {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .gov-list span {
+    max-width: none;
+    text-align: left;
   }
 }
 
