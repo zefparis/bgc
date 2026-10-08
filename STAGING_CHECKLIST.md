@@ -10,8 +10,8 @@ Set in Vercel → Project → Settings → Environment Variables (scope: **Previ
 |---|---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | client | metadata, sitemap, canonical, og:url | ✅ staging URL (e.g. `https://staging.bgcholding.com`) |
 | `RESEND_API_KEY` | server | contact email send | 🔐 only after Resend domain verified |
-| `CONTACT_FROM` | server | verified sender identity | `BGC Holding Website <noreply@bgcholding.com>` (must be on verified domain) |
-| `CONTACT_TO` | server | destination inbox | `info@bgcholding.com` |
+| `CONTACT_FROM_EMAIL` | server | verified sender identity | `BGC Holding Website <noreply@bgcholding.com>` (must be on verified domain) |
+| `CONTACT_TO_EMAIL` | server | destination inbox | `info@bgcholding.com` |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | client | Turnstile widget render | 🔐 after Cloudflare site created |
 | `TURNSTILE_SECRET_KEY` | server | siteverify | 🔐 paired with site key |
 
@@ -59,7 +59,7 @@ Degradation contract: **all** contact envs may be absent → API returns 503 →
 | 8 | `POST /api/contact` (valid, no env) | 503 `{ok:false}` — honest error |
 | 9 | `POST /api/contact` (hp filled) | 200 `{ok:true}` — honeypot silent-accept |
 | 10 | 6× `POST /api/contact` same IP | 6th → 429 rate-limited |
-| 11 | With envs configured (🔐) | valid submit → 200, email lands in `CONTACT_TO` |
+| 11 | With envs configured (🔐) | valid submit → 200, email lands in `CONTACT_TO_EMAIL` |
 
 ## 6. DNS requirements
 

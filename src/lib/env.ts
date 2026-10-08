@@ -16,8 +16,8 @@ import { z } from 'zod';
 
 const serverSchema = z.object({
   RESEND_API_KEY: z.string().min(1).optional(),
-  CONTACT_FROM: z.string().min(1).optional(),
-  CONTACT_TO: z.email().optional(),
+  CONTACT_FROM_EMAIL: z.string().min(1).optional(),
+  CONTACT_TO_EMAIL: z.email().optional(),
   TURNSTILE_SECRET_KEY: z.string().min(1).optional(),
 });
 
@@ -37,8 +37,8 @@ function parseOrWarn<T>(schema: z.ZodType<T>, raw: unknown, scope: string): T | 
 
 const server = parseOrWarn(serverSchema, {
   RESEND_API_KEY: process.env.RESEND_API_KEY,
-  CONTACT_FROM: process.env.CONTACT_FROM,
-  CONTACT_TO: process.env.CONTACT_TO,
+  CONTACT_FROM_EMAIL: process.env.CONTACT_FROM_EMAIL,
+  CONTACT_TO_EMAIL: process.env.CONTACT_TO_EMAIL,
   TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
 }, 'server');
 
@@ -51,8 +51,8 @@ export const env = {
   siteUrl: client?.NEXT_PUBLIC_SITE_URL ?? 'https://bgcholding.com',
   turnstileSiteKey: client?.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   resendApiKey: server?.RESEND_API_KEY,
-  contactFrom: server?.CONTACT_FROM,
-  contactTo: server?.CONTACT_TO,
+  contactFrom: server?.CONTACT_FROM_EMAIL,
+  contactTo: server?.CONTACT_TO_EMAIL,
   turnstileSecretKey: server?.TURNSTILE_SECRET_KEY,
 };
 
