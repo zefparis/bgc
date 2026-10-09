@@ -30,8 +30,7 @@ export const metadata: Metadata = {
   description: site.description,
   openGraph: {
     title: site.name,
-    description:
-      'Building businesses. Connecting markets. Delivering projects. A diversified holding group linking Africa, the GCC and international markets.',
+    description: site.description,
     url: env.siteUrl,
     siteName: site.name,
     type: 'website',

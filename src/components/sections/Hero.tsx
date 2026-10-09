@@ -1,5 +1,5 @@
 import { AfricaMap } from '@/components/shared/AfricaMap';
-import { heroStats } from '@/content/site';
+import { heroStats, site } from '@/content/site';
 
 export function Hero() {
   return (
@@ -12,11 +12,8 @@ export function Hero() {
         <div className="hero-eyebrow">
           A diversified holding group · Africa — GCC — Europe — Asia
         </div>
-        <h1>Building businesses. Connecting markets. Delivering projects.</h1>
-        <p className="lede">
-          We originate opportunities, deploy capital, build partnerships and
-          manage projects from inception through to operation.
-        </p>
+        <h1>{site.tagline}</h1>
+        <p className="lede">{site.description}</p>
         <div className="hero-foot">
           {heroStats.map((s) => (
             <div key={s.label}>

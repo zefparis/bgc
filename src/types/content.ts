@@ -60,6 +60,14 @@ export interface Office {
   role: string;
 }
 
+export interface Region {
+  name: string;
+  /** Regional activity description from the PDF OUR NETWORK section. */
+  description: string;
+  /** Physical office in the region, if any — GCC has none. */
+  office?: string;
+}
+
 export interface GovernanceItem {
   title: string;
   description: string;
