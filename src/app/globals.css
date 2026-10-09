@@ -282,52 +282,40 @@ header.nav.scrolled {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background:
-    radial-gradient(55% 45% at 92% 96%, rgba(184, 81, 31, 0.4) 0%, transparent 70%),
-    radial-gradient(45% 40% at 100% 4%, rgba(63, 107, 63, 0.28) 0%, transparent 70%),
-    radial-gradient(40% 35% at 4% 92%, rgba(201, 154, 46, 0.22) 0%, transparent 70%),
-    radial-gradient(120% 100% at 15% 0%, #212b38 0%, var(--color-ink) 55%, #0d1218 100%);
+  background: var(--color-ink);
   color: var(--color-bone);
   position: relative;
   padding: 0 0 90px;
   overflow: hidden;
 }
 
-.hero-grid {
+.hero-media {
   position: absolute;
   inset: 0;
-  opacity: 0.32;
-  background-image:
-    linear-gradient(var(--color-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 70%);
 }
 
-.hero-map {
+.hero-img {
+  object-fit: cover;
+  object-position: 72% 50%;
+}
+
+/* Left→right navy veil — text zone stays dark, Africa stays lit. */
+.hero-shade {
   position: absolute;
-  right: 4%;
-  top: 16%;
-  width: 41%;
-  max-width: 480px;
-  opacity: 0.42;
-  color: var(--color-ochre-l);
-  pointer-events: none;
-}
-
-.hero-map svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-@media (max-width: 760px) {
-  .hero-map {
-    width: 59%;
-    right: 8%;
-    top: 20%;
-    opacity: 0.35;
-  }
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(16, 22, 30, 0.94) 0%,
+      rgba(16, 22, 30, 0.74) 34%,
+      rgba(16, 22, 30, 0.34) 60%,
+      rgba(16, 22, 30, 0.08) 80%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(16, 22, 30, 0.6) 0%,
+      rgba(16, 22, 30, 0) 34%
+    );
 }
 
 .hero-inner {
@@ -340,13 +328,34 @@ header.nav.scrolled {
   color: var(--color-brass-l);
   margin-bottom: 22px;
   letter-spacing: 0.02em;
+  animation: hero-fade 0.7s 0.1s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
 }
 
 .hero h1 {
   font-size: clamp(34px, 5.4vw, 64px);
   line-height: 1.08;
   max-width: 14ch;
-  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+/* Masked line-by-line headline reveal. */
+.h-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.h-line-in {
+  display: block;
+  animation: hero-line 0.8s cubic-bezier(0.16, 0.7, 0.3, 1) backwards;
+}
+
+.h-line:nth-child(1) .h-line-in {
+  animation-delay: 0.35s;
+}
+
+.h-line:nth-child(2) .h-line-in {
+  animation-delay: 0.5s;
 }
 
 .hero p.lede {
@@ -354,7 +363,7 @@ header.nav.scrolled {
   max-width: 46ch;
   color: #c7ccd4;
   font-size: 17px;
-  animation: rise 0.9s 0.12s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation: hero-fade 0.75s 0.85s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
 }
 
 .hero-foot {
@@ -362,7 +371,79 @@ header.nav.scrolled {
   display: flex;
   gap: 48px;
   flex-wrap: wrap;
-  animation: rise 0.9s 0.22s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.hero-foot div {
+  animation: hero-fade 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+
+.hero-foot div:nth-child(1) {
+  animation-delay: 1s;
+}
+
+.hero-foot div:nth-child(2) {
+  animation-delay: 1.12s;
+}
+
+.hero-foot div:nth-child(3) {
+  animation-delay: 1.24s;
+}
+
+.hero-foot div:nth-child(4) {
+  animation-delay: 1.36s;
+}
+
+@keyframes hero-line {
+  from {
+    opacity: 0;
+    transform: translateY(108%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Stronger veil on small screens — text contrast over the map. */
+  .hero-shade {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(16, 22, 30, 0.92) 0%,
+        rgba(16, 22, 30, 0.68) 55%,
+        rgba(16, 22, 30, 0.4) 100%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(16, 22, 30, 0.7) 0%,
+        rgba(16, 22, 30, 0) 45%
+      );
+  }
+
+  .hero-img {
+    object-position: 68% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow,
+  .h-line-in,
+  .hero p.lede,
+  .hero-foot div {
+    animation: none;
+  }
 }
 
 .hero-foot div {
@@ -396,25 +477,6 @@ header.nav.scrolled {
 .hero-foot span {
   font-size: 13px;
   color: #8f97a3;
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero h1,
-  .hero p.lede,
-  .hero-foot {
-    animation: none;
-  }
 }
 
 /* ── SCROLL REVEAL ── */

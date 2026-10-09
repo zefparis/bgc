@@ -87,9 +87,9 @@ for (const [name, text] of [
 
 // ── Canonical content still intact ────────────────────────────
 report('PDF headline is hero H1',
-  (await page.locator('.hero h1').innerText()).includes(
-    'Eleven operating companies. One execution platform.',
-  ),
+  (await page.locator('.hero h1').innerText())
+    .replace(/\s+/g, ' ')
+    .includes('Eleven operating companies. One execution platform.'),
 );
 report('nine lifecycle steps', (await page.locator('.step').count()) === 9);
 report('phase 09 present', await has('Exit & Succession'));
