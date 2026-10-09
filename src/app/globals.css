@@ -440,6 +440,18 @@ header.nav.scrolled {
 }
 
 /* ── ACCESSIBILITY ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -782,22 +794,27 @@ section {
   color: #a9afb9;
 }
 
-.flow {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* BGC Execution System — connected node map + contextual detail panel. */
+.exec-sys {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 72px;
+  align-items: start;
+}
+
+.exec-map {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 56px;
-  row-gap: 64px;
+  row-gap: 56px;
 }
 
 .step {
   position: relative;
 }
 
-/* Serpentine flow — row 2 reads right → left so the path stays continuous. */
-@media (min-width: 901px) {
+/* Serpentine placement — the connected path folds at each row end. */
+@media (min-width: 601px) {
   .step:nth-child(4) {
     grid-area: 2 / 3;
   }
@@ -810,13 +827,13 @@ section {
     grid-area: 2 / 1;
   }
 
-  /* Gap connectors — the rail line continues across column gaps. */
-  .step:nth-child(2) .step-marker::before,
-  .step:nth-child(3) .step-marker::before,
-  .step:nth-child(4) .step-marker::before,
-  .step:nth-child(5) .step-marker::before,
-  .step:nth-child(8) .step-marker::before,
-  .step:nth-child(9) .step-marker::before {
+  /* Gap connectors — the marker rail continues across column gaps. */
+  .step:nth-child(2) .exec-node-marker::before,
+  .step:nth-child(3) .exec-node-marker::before,
+  .step:nth-child(4) .exec-node-marker::before,
+  .step:nth-child(5) .exec-node-marker::before,
+  .step:nth-child(8) .exec-node-marker::before,
+  .step:nth-child(9) .exec-node-marker::before {
     content: '';
     position: absolute;
     right: 100%;
@@ -824,9 +841,10 @@ section {
     width: 56px;
     height: 1px;
     background: var(--color-line);
+    transition: background 0.25s ease;
   }
 
-  /* Row transitions — a drop from node 03 → 04 and 06 → 07 at the dot axis. */
+  /* Row transitions — drops 03 → 04 and 06 → 07 on the dot axis. */
   .step:nth-child(3)::after,
   .step:nth-child(6)::after {
     content: '';
@@ -834,21 +852,34 @@ section {
     top: 100%;
     left: 4px;
     width: 1px;
-    height: 64px;
+    height: 56px;
     background: var(--color-line);
   }
 }
 
-.step-marker {
+.exec-node {
+  appearance: none;
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.exec-node-marker {
   position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
   height: 20px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
-.step-dot {
+.exec-dot {
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -860,42 +891,40 @@ section {
     box-shadow 0.25s ease;
 }
 
-.step .n {
+.exec-node .n {
   font-family: var(--font-serif);
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 0.16em;
   color: var(--color-ochre-l);
   flex: none;
 }
 
-.step-marker::after {
+.exec-node-marker::after {
   content: '';
   flex: 1;
   height: 1px;
   background: var(--color-line);
-  margin-left: 6px;
+  transition: background 0.25s ease;
 }
 
-.step h3 {
-  font-size: 17.5px;
-  margin-bottom: 8px;
-}
-
-.step p {
-  color: #a9afb9;
-  font-size: 14px;
-  line-height: 1.6;
+.exec-node-title {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 15.5px;
+  line-height: 1.35;
+  color: #b9bfc9;
+  transition: color 0.2s ease;
 }
 
 /* Origin and terminus markers. */
-.step:first-child .step-dot {
+.step:first-child .exec-dot {
   width: 11px;
   height: 11px;
   background: var(--color-ochre-l);
   box-shadow: 0 0 0 5px rgba(230, 189, 110, 0.12);
 }
 
-.step:last-child .step-dot {
+.step:last-child .exec-dot {
   width: 10px;
   height: 10px;
   border-radius: 1px;
@@ -903,58 +932,139 @@ section {
   background: var(--color-ochre-l);
 }
 
-/* Quiet hover emphasis — informational content never depends on it. */
-.step:hover .step-dot {
+/* Hover / selection — restrained brass emphasis. */
+.exec-node:hover .exec-node-title,
+.exec-node[aria-selected='true'] .exec-node-title {
+  color: var(--color-bone);
+}
+
+.exec-node:hover .exec-dot,
+.exec-node[aria-selected='true'] .exec-dot {
   background: var(--color-ochre-l);
   box-shadow: 0 0 0 6px rgba(230, 189, 110, 0.14);
 }
 
-.step:hover .step-marker::before {
-  background: rgba(230, 189, 110, 0.5);
+.exec-node:hover .exec-node-marker::before,
+.exec-node[aria-selected='true'] .exec-node-marker::before {
+  background: rgba(230, 189, 110, 0.45);
 }
 
-.step:hover .step-marker::after {
+.exec-node:hover .exec-node-marker::after,
+.exec-node[aria-selected='true'] .exec-node-marker::after {
   background: rgba(230, 189, 110, 0.28);
 }
 
-/* Vertical connected timeline on tablet and mobile. */
-@media (max-width: 900px) {
-  .flow {
-    display: block;
+/* Contextual detail panel — the focal point. */
+.exec-panel {
+  position: sticky;
+  top: 110px;
+  background: #1c2631;
+  border: 1px solid var(--color-line);
+  border-top: 2px solid var(--color-ochre);
+  padding: 34px 32px 30px;
+}
+
+.exec-panel-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.exec-panel-idx {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--color-ochre-l);
+  letter-spacing: -0.01em;
+}
+
+.exec-panel-count {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7d8490;
+}
+
+.exec-panel h3 {
+  font-size: 24px;
+  margin-bottom: 14px;
+  color: var(--color-bone);
+}
+
+.exec-panel p {
+  color: #a9afb9;
+  font-size: 15px;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+.exec-progress {
+  display: flex;
+  gap: 6px;
+  margin-top: 26px;
+}
+
+.exec-progress i {
+  width: 18px;
+  height: 2px;
+  background: var(--color-line);
+  transition: background 0.2s ease;
+}
+
+.exec-progress i.on {
+  background: var(--color-ochre-l);
+}
+
+.exec-panel-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-line);
+}
+
+.exec-panel-nav button {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ochre-l);
+  cursor: pointer;
+}
+
+.exec-panel-nav button:hover {
+  color: var(--color-bone);
+}
+
+@media (max-width: 1023px) {
+  .exec-sys {
+    grid-template-columns: 1fr;
+    gap: 48px;
   }
 
-  .step {
-    padding: 0 0 44px 40px;
+  .exec-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .exec-map {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    row-gap: 24px;
   }
 
-  .step:last-child {
-    padding-bottom: 0;
+  .exec-node-title {
+    font-size: 14px;
   }
 
-  /* Spine — one segment per node so it can terminate at the last dot. */
-  .step::before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--color-line);
-  }
-
-  .step:first-child::before {
-    top: 10px;
-  }
-
-  .step:last-child::before {
-    bottom: auto;
-    height: 11px;
-  }
-
-  .step-dot {
-    position: absolute;
-    left: 4px;
-    top: 5px;
+  .exec-panel {
+    padding: 26px 22px 24px;
   }
 }
 
