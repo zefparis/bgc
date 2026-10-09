@@ -22,32 +22,39 @@ export function Business() {
           <h3>{groupStructure.headline}</h3>
           <p>{groupStructure.intro}</p>
         </div>
-        <div className="biz-grid">
-          {sectorGroups.map((sector) => {
+        <div className="biz-sectors">
+          {sectorGroups.map((sector, index) => {
             const members = sector.companies
               .map((slug) => companiesBySlug.get(slug))
               .filter((c): c is OperatingCompany => Boolean(c));
             return (
-              <div className="biz-card reveal" key={sector.id}>
-                <div className="tag" />
-                <h3>{sector.name}</h3>
-                <p>{sector.summary}</p>
-                {members.map((company) => (
-                  <div className="biz-company" key={company.slug}>
-                    <div className="biz-company-head">
-                      <b>{company.name}</b>
-                      <span className="biz-sector-label">
-                        {company.sectorLabel}
-                      </span>
+              <div className="biz-sector reveal" key={sector.id}>
+                <div className="biz-sector-head">
+                  <span className="biz-index">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <div className="tag" />
+                  <h3>{sector.name}</h3>
+                  <p>{sector.summary}</p>
+                </div>
+                <div className="biz-companies">
+                  {members.map((company) => (
+                    <div className="biz-company" key={company.slug}>
+                      <div className="biz-company-head">
+                        <b>{company.name}</b>
+                        <span className="biz-sector-label">
+                          {company.sectorLabel}
+                        </span>
+                      </div>
+                      <p>{company.description}</p>
+                      <div className="biz-caps">
+                        {company.capabilities.map((cap) => (
+                          <span key={cap}>{cap}</span>
+                        ))}
+                      </div>
                     </div>
-                    <p>{company.description}</p>
-                    <div className="biz-caps">
-                      {company.capabilities.map((cap) => (
-                        <span key={cap}>{cap}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             );
           })}

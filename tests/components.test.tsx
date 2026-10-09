@@ -14,7 +14,7 @@ import { operatingCompanies } from '@/content/companies';
 describe('Business section', () => {
   it('renders all six sector groups', () => {
     const { container } = render(<Business />);
-    const cards = container.querySelectorAll('.biz-card');
+    const cards = container.querySelectorAll('.biz-sector');
     expect(cards).toHaveLength(6);
     expect(screen.getByText('Aviation & Mobility')).toBeTruthy();
     expect(screen.getByText('Healthcare')).toBeTruthy();
