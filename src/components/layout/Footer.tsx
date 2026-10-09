@@ -36,6 +36,7 @@ export function Footer() {
           </div>
           <div>{site.copyright}</div>
         </div>
+        <p className="footer-disclaimer">{site.disclaimer}</p>
       </div>
     </footer>
   );

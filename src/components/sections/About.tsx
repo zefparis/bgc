@@ -1,5 +1,9 @@
 import { SectionHead } from '@/components/shared/SectionHead';
-import { governance, offices, regions } from '@/content/locations';
+import {
+  governance,
+  governanceIntro,
+  groupStructure,
+} from '@/content/locations';
 
 export function About() {
   return (
@@ -8,8 +12,8 @@ export function About() {
         <div className="about">
         <div>
           <SectionHead
-            kicker="About"
-            title="Eleven operating companies. One execution platform."
+            kicker="The Group"
+            title="A holding company built to originate, structure and deliver."
             style={{ marginBottom: 26 }}
           />
           <p>
@@ -32,21 +36,18 @@ export function About() {
           </p>
         </div>
         <div className="about-list">
-          {offices.map((o) => (
-            <div key={o.city}>
-              <b>{o.city}</b>
-              <span>{`${o.label} · ${o.country}`}</span>
+          {groupStructure.pillars.map((p) => (
+            <div key={p.label}>
+              <b>{p.label}</b>
+              <span>{p.text}</span>
             </div>
           ))}
-          <div>
-            <b>Regions</b>
-            <span>{regions.join(' · ')}</span>
-          </div>
         </div>
         </div>
 
         <div className="about-gov">
           <h3>Disciplined ownership. Accountable delivery.</h3>
+          <p className="gov-intro">{governanceIntro}</p>
           <div className="about-list gov-list">
             {governance.map((item) => (
               <div key={item.title}>
