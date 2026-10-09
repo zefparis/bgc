@@ -10,17 +10,18 @@ export function Approach() {
           title="From opportunity to operation."
           description="Our expertise spans the full lifecycle of a project, transaction, joint venture or company — from concept through to maturity."
         />
-        <div className="approach-list">
+        <ol className="flow">
           {approachSteps.map((step) => (
-            <div className="step reveal" key={step.number}>
-              <div className="n">{step.number}</div>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
+            <li className="step reveal" key={step.number}>
+              <div className="step-marker">
+                <span className="step-dot" aria-hidden="true" />
+                <span className="n">{step.number}</span>
               </div>
-            </div>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
