@@ -468,10 +468,6 @@ section {
   color: var(--color-terracotta);
 }
 
-#approach .kicker {
-  color: var(--color-savanna);
-}
-
 .exec .kicker {
   color: var(--color-terracotta);
 }
@@ -590,73 +586,135 @@ section {
   color: #a9afb9;
 }
 
-.biz-grid {
+.biz-sectors {
+  border-top: 1px solid var(--color-line);
+}
+
+.biz-sector {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--color-line);
-  border: 1px solid var(--color-line);
+  grid-template-columns: 300px 1fr;
+  gap: 72px;
+  padding: 64px 0;
+  border-bottom: 1px solid var(--color-line);
 }
 
-.biz-card {
-  background: var(--color-ink);
-  padding: 36px 30px;
-  min-height: 230px;
-  display: flex;
-  flex-direction: column;
+.biz-sector:nth-child(1) {
+  --sector-accent: var(--color-terracotta-l);
 }
 
-.biz-card .tag {
-  width: 34px;
+.biz-sector:nth-child(2) {
+  --sector-accent: var(--color-ochre-l);
+}
+
+.biz-sector:nth-child(3) {
+  --sector-accent: var(--color-savanna-l);
+}
+
+.biz-sector:nth-child(4) {
+  --sector-accent: var(--color-sunset);
+}
+
+.biz-sector:nth-child(5) {
+  --sector-accent: var(--color-brass-l);
+}
+
+.biz-sector:nth-child(6) {
+  --sector-accent: var(--color-ochre-l);
+}
+
+.biz-index {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--color-ochre-l);
+  margin-bottom: 20px;
+}
+
+.biz-sector-head .tag {
+  width: 40px;
   height: 3px;
-  background: var(--color-brass);
-  margin-bottom: 22px;
+  background: var(--sector-accent, var(--color-brass));
+  margin-bottom: 24px;
 }
 
-.biz-card:nth-child(1) .tag {
-  background: var(--color-terracotta-l);
+.biz-sector-head h3 {
+  font-size: 27px;
+  letter-spacing: -0.015em;
+  margin-bottom: 16px;
 }
 
-.biz-card:nth-child(2) .tag {
-  background: var(--color-ochre-l);
+.biz-sector-head p {
+  color: #a9afb9;
+  font-size: 15px;
+  line-height: 1.62;
+  max-width: 36ch;
 }
 
-.biz-card:nth-child(3) .tag {
-  background: var(--color-savanna-l);
+.biz-companies {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  align-content: start;
 }
 
-.biz-card:nth-child(4) .tag {
-  background: var(--color-sunset);
+.biz-company:only-child {
+  grid-column: 1 / -1;
 }
 
-.biz-card:nth-child(5) .tag {
-  background: var(--color-brass-l);
+.biz-company {
+  background: rgba(244, 241, 234, 0.028);
+  border: 1px solid var(--color-line);
+  border-left: 2px solid var(--sector-accent, var(--color-brass));
+  padding: 26px 28px 28px;
 }
 
-.biz-card:nth-child(6) .tag {
-  background: var(--color-ochre-l);
-}
-
-.biz-card h3 {
-  font-size: 20px;
+.biz-company-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
 
-.biz-card .biz-companies {
-  font-size: 13px;
-  color: var(--color-ochre-l);
-  letter-spacing: 0.04em;
-  margin-bottom: 10px;
+.biz-company-head b {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
 }
 
-.biz-card p {
+.biz-sector-label {
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-ochre-l);
+}
+
+.biz-company > p {
   color: #a9afb9;
-  font-size: 14.8px;
-  line-height: 1.55;
+  font-size: 14.2px;
+  line-height: 1.6;
+}
+
+.biz-caps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.biz-caps span {
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  padding: 5px 11px;
+  font-size: 11.5px;
+  color: #b8bec8;
+  letter-spacing: 0.02em;
 }
 
 .structure-head {
-  margin-bottom: 34px;
+  margin-bottom: 56px;
   max-width: 640px;
 }
 
@@ -674,97 +732,230 @@ section {
   max-width: 62ch;
 }
 
-.biz-company {
-  border-top: 1px solid var(--color-line);
-  margin-top: 18px;
-  padding-top: 16px;
-}
-
-.biz-company-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}
-
-.biz-company-head b {
-  font-family: var(--font-serif);
-  font-size: 16.5px;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-}
-
-.biz-sector-label {
-  font-size: 10.5px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--color-ochre-l);
-}
-
-.biz-caps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-}
-
-.biz-caps span {
-  border: 1px solid var(--color-line);
-  border-radius: 2px;
-  padding: 4px 9px;
-  font-size: 11.5px;
-  color: #b8bec8;
-  letter-spacing: 0.02em;
-}
-
 .biz-footnote {
-  margin-top: 22px;
+  margin-top: 40px;
   font-size: 12.5px;
   color: #7d8490;
 }
 
 @media (max-width: 900px) {
-  .biz-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .biz-sector {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 52px 0;
+  }
+
+  .biz-sector-head p {
+    max-width: 62ch;
+  }
+
+  .biz-companies {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 }
 
 @media (max-width: 600px) {
-  .biz-grid {
-    grid-template-columns: 1fr;
+  .biz-sector {
+    padding: 44px 0;
+  }
+
+  .biz-company {
+    padding: 22px 20px 24px;
   }
 }
 
 /* ── APPROACH ── */
-.approach-list {
-  border-top: 1px solid var(--color-line-d);
+#approach {
+  background:
+    radial-gradient(70% 45% at 85% 0%, rgba(201, 154, 46, 0.05) 0%, transparent 60%),
+    #151d26;
+  color: var(--color-bone);
+  border-top: 1px solid var(--color-line);
+}
+
+#approach .kicker {
+  color: var(--color-ochre-l);
+}
+
+#approach .section-head p {
+  color: #a9afb9;
+}
+
+.flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 56px;
+  row-gap: 64px;
 }
 
 .step {
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 24px;
-  padding: 26px 0;
-  border-bottom: 1px solid var(--color-line-d);
+  position: relative;
+}
+
+/* Serpentine flow — row 2 reads right → left so the path stays continuous. */
+@media (min-width: 901px) {
+  .step:nth-child(4) {
+    grid-area: 2 / 3;
+  }
+
+  .step:nth-child(5) {
+    grid-area: 2 / 2;
+  }
+
+  .step:nth-child(6) {
+    grid-area: 2 / 1;
+  }
+
+  /* Gap connectors — the rail line continues across column gaps. */
+  .step:nth-child(2) .step-marker::before,
+  .step:nth-child(3) .step-marker::before,
+  .step:nth-child(4) .step-marker::before,
+  .step:nth-child(5) .step-marker::before,
+  .step:nth-child(8) .step-marker::before,
+  .step:nth-child(9) .step-marker::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    width: 56px;
+    height: 1px;
+    background: var(--color-line);
+  }
+
+  /* Row transitions — a drop from node 03 → 04 and 06 → 07 at the dot axis. */
+  .step:nth-child(3)::after,
+  .step:nth-child(6)::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 4px;
+    width: 1px;
+    height: 64px;
+    background: var(--color-line);
+  }
+}
+
+.step-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 20px;
+  margin-bottom: 18px;
+}
+
+.step-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--color-ochre-l);
+  background: #151d26;
+  flex: none;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .step .n {
   font-family: var(--font-serif);
-  font-size: 22px;
-  color: var(--color-brass);
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  color: var(--color-ochre-l);
+  flex: none;
+}
+
+.step-marker::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+  margin-left: 6px;
 }
 
 .step h3 {
-  font-size: 18.5px;
-  margin-bottom: 6px;
+  font-size: 17.5px;
+  margin-bottom: 8px;
 }
 
 .step p {
-  color: var(--color-slate);
-  font-size: 15px;
-  max-width: 60ch;
+  color: #a9afb9;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Origin and terminus markers. */
+.step:first-child .step-dot {
+  width: 11px;
+  height: 11px;
+  background: var(--color-ochre-l);
+  box-shadow: 0 0 0 5px rgba(230, 189, 110, 0.12);
+}
+
+.step:last-child .step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  background: var(--color-ochre-l);
+}
+
+/* Quiet hover emphasis — informational content never depends on it. */
+.step:hover .step-dot {
+  background: var(--color-ochre-l);
+  box-shadow: 0 0 0 6px rgba(230, 189, 110, 0.14);
+}
+
+.step:hover .step-marker::before {
+  background: rgba(230, 189, 110, 0.5);
+}
+
+.step:hover .step-marker::after {
+  background: rgba(230, 189, 110, 0.28);
+}
+
+/* Vertical connected timeline on tablet and mobile. */
+@media (max-width: 900px) {
+  .flow {
+    display: block;
+  }
+
+  .step {
+    padding: 0 0 44px 40px;
+  }
+
+  .step:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Spine — one segment per node so it can terminate at the last dot. */
+  .step::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-line);
+  }
+
+  .step:first-child::before {
+    top: 10px;
+  }
+
+  .step:last-child::before {
+    bottom: auto;
+    height: 11px;
+  }
+
+  .step-dot {
+    position: absolute;
+    left: 4px;
+    top: 5px;
+  }
 }
 
 /* ── EXECUTION ── */
