@@ -454,13 +454,13 @@ header.nav.scrolled {
   }
 
   .hero-img {
-    object-position: right bottom;
+    object-position: right 58%;
     mask-image:
-      linear-gradient(180deg, transparent 0%, black 26%, black 100%),
+      linear-gradient(180deg, transparent 0%, black 20%, black 88%, transparent 100%),
       linear-gradient(90deg, transparent 0%, black 30%, black 100%);
     mask-composite: intersect;
     -webkit-mask-image:
-      linear-gradient(180deg, transparent 0%, black 26%, black 100%),
+      linear-gradient(180deg, transparent 0%, black 20%, black 88%, transparent 100%),
       linear-gradient(90deg, transparent 0%, black 30%, black 100%);
     -webkit-mask-composite: source-in;
   }
