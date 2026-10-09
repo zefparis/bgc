@@ -8,7 +8,7 @@ export function Approach() {
         <SectionHead
           kicker="Our Approach"
           title="From opportunity to operation."
-          description="Our expertise spans the full lifecycle of a project, transaction, joint venture or company — from concept through to maturation."
+          description="Our expertise spans the full lifecycle of a project, transaction, joint venture or company — from concept through to maturity."
         />
         <div className="approach-list">
           {approachSteps.map((step) => (

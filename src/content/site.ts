@@ -4,10 +4,12 @@
 export const site = {
   name: 'BGC Holding',
   legalName: 'BGC HOLDING',
-  tagline: 'Building businesses. Connecting markets. Delivering projects.',
+  /** Cover headline — PDF page 01. */
+  tagline: 'Eleven operating companies. One execution platform.',
   motto: 'Origination. Partnership. Execution.',
+  /** Cover descriptor — PDF page 01, verbatim. */
   description:
-    'BGC Holding is a diversified holding group headquartered in Sandton, South Africa, building and operating businesses across Africa, the GCC and international markets.',
+    'BGC Holding builds and operates businesses across aviation, automotive, contracting, energy, trade, commodities, healthcare, security, drones, data and artificial intelligence, linking African markets with capital, technology and partners worldwide.',
   contact: {
     email: 'info@bgcholding.com',
     phone: '+27 11 245 5900',
